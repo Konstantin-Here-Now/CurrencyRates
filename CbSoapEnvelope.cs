@@ -1,9 +1,12 @@
 namespace CbSoapEnvelope;
+using Logging;
 
 public class SoapEnvelope
 {
     public static string CreateSoapEnvelopeCbCurs(DateTime dateTime)
     {
+        Logger.Info("Creating envelope for SOAP request...");
+
         string iso8601String = dateTime.ToString("yyyy-MM-dd");
         string soapEnvelope = @"<?xml version=""1.0"" encoding=""utf-8""?>" +
         @"<soap12:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap12=""http://www.w3.org/2003/05/soap-envelope"">" +

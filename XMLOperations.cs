@@ -1,4 +1,4 @@
-namespace XMLOperations;
+namespace XMLOperationsList;
 
 using System.Xml.Linq;
 

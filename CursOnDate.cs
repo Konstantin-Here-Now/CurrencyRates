@@ -4,8 +4,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using System.Xml.Linq;
-using Microsoft.VisualBasic;
-using static XMLOperations.XMLOperations;
+using Logging;
+using static XMLOperationsList.XMLOperations;
 
 public struct OneCursStruct
 {
@@ -37,15 +37,19 @@ public class CursOnDateOperations
             string year = unformattedDate[0..4];
             string month = unformattedDate[4..6];
             string day = unformattedDate[6..8];
-            
+
             return $"{year}-{month}-{day}";
         }
         else
+            Logger.Warning("The was no date in Central Bank XML response." +
+            "Be careful: if the time of this log is later then 12:00 UTC+3, date of currency exchange rates may be wrong.");
             return DateTime.Today.ToString("yyyy-MM-dd");
     }
 
     public static List<CursOnDateStruct> ParseCbCursOnDate(string response)
     {
+        Logger.Info("Parsing XML-response...");
+
         var cursesParsed = new List<CursOnDateStruct>();
         XDocument cursesXDoc = XDocument.Parse(response);
         string cursDate = GetCursDateOrToday(cursesXDoc);
@@ -72,6 +76,8 @@ public class CursOnDateOperations
 
             cursesParsed.Add(oneCursOnDate);
         }
+
+        Logger.Info("Parsed successfully.");
 
         return cursesParsed;
     }
