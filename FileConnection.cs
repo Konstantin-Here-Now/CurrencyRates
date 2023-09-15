@@ -1,9 +1,11 @@
 namespace FileConnection;
+using Logging;
 
-class JSONFileWriter
+class WriterToFile
 {
     public static void WriteResultToFile(string result, string resultsFilename)
     {
+        Logger.Info($"Writing results to file {resultsFilename}.");
         string pathToFile = Environment.CurrentDirectory + "/" + resultsFilename;
 
 
@@ -11,6 +13,5 @@ class JSONFileWriter
         {
             streamWriter.WriteLine(result);
         }
-
     }
 }

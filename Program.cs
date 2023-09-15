@@ -2,9 +2,10 @@
 
 using static SoapConnection.Connection;
 using static CbSoapEnvelope.SoapEnvelope;
-using static FileConnection.JSONFileWriter;
+using static FileConnection.WriterToFile;
 using CursOnDate;
 using static CursOnDate.CursOnDateOperations;
+using Logging;
 
 class Program
 {
@@ -21,12 +22,14 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Logger.Error(ex.Message);
+            throw;
         }
     }
 
     static void CallBack(Dictionary<string, dynamic> config)
     {
+        Logger.Info("Starting another loop...");
         string URL = config["cbURL"];
         string resultsFilename = config["resultsFilename"];
         bool serializeNeeded = config["serializeNeeded"];
@@ -35,24 +38,28 @@ class Program
         if (URL == null | resultsFilename == null) throw new ArgumentNullException("Missing args URL or resultsFilename");
 
         string SoapEnvelope = CreateSoapEnvelopeCbCurs(DateTime.Today);
-        string response = GetSoapResponse(URL, SoapEnvelope);
+        string response = GetSoapResponse(URL!, SoapEnvelope);
 
         if (serializeNeeded == true)
         {
             List<CursOnDateStruct> parsedResult = ParseCbCursOnDate(response);
             string serializedResult = JSONSerializeCbCursOnDate(parsedResult);
 
-            WriteResultToFile(serializedResult, resultsFilename);
+            WriteResultToFile(serializedResult, resultsFilename!);
         }
         else
-            WriteResultToFile(response, resultsFilename);
+            WriteResultToFile(response, resultsFilename!);
+
+        Logger.Info("Everything was successful.");
     }
+
     static Dictionary<string, dynamic> GetConfig()
     {
+        Logger.Info("Setting config...");
         var config = new Dictionary<string, dynamic>()
         {
-            {"cbURL", ConfigurationManager.AppSettings["cbURL"]},
-            {"resultsFilename", ConfigurationManager.AppSettings["resultsFilename"]},
+            {"cbURL", ConfigurationManager.AppSettings["cbURL"]!},
+            {"resultsFilename", ConfigurationManager.AppSettings["resultsFilename"]!},
             {"serializeNeeded", Convert.ToBoolean(ConfigurationManager.AppSettings["serializeNeeded"])},
             {"timerIntervalHours", Convert.ToInt32(ConfigurationManager.AppSettings["timerIntervalHours"])}
         };
@@ -60,6 +67,7 @@ class Program
         if (config["cbURL"] == null | config["resultsFilename"] == null) throw new ArgumentNullException("Missing args URL or resultsFilename.");
         if (config["timerIntervalHours"] <= 0) throw new ArgumentException("Timer interval must be greater than zero.");
 
+        Logger.Info("Config have been set up.");
         return config;
     }
 }
