@@ -45,16 +45,16 @@ class Program
             List<CursOnDateStruct> parsedResult = ParseCbCursOnDate(response);
             string serializedResult = JSONSerializeCbCursOnDate(parsedResult);
 
-            WriteResultToFile(serializedResult, resultsFilename!);
+            WriteToFile(serializedResult, resultsFilename!);
         }
         else if (response == "")
         {
-            WriteResultToFile("Something went wrong, check logs.", resultsFilename!);
+            WriteToFile("Something went wrong, check logs.", resultsFilename!);
             Logger.Error("<<<Something went wrong...>>>");
             return;
         }
         else
-            WriteResultToFile(response, resultsFilename!);
+            WriteToFile(response, resultsFilename!);
 
         Logger.Info("<<<Everything was successful.>>>");
     }

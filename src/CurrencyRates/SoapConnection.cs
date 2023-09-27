@@ -29,24 +29,21 @@ public class Connection
         Logger.Info("Getting SOAP requests' response...");
         try
         {
-        HttpWebRequest request = CreatePOSTSoapWebRequest(url, soapEnvelope);
-        WebResponse response = request.GetResponse();
+            HttpWebRequest request = CreatePOSTSoapWebRequest(url, soapEnvelope);
+            WebResponse response = request.GetResponse();
 
-        StreamReader streamReader = new StreamReader(response.GetResponseStream());
-        string result = streamReader.ReadToEnd();
-        // TODO is it necessary?
-        streamReader.Close();
-
+            using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+            {
+                string result = streamReader.ReadToEnd();
+                Logger.Info("Got response successfully.");
+                return result;
+            }
         }
-        catch (System.Net.WebException ex)
+        catch (WebException ex)
         {
             Logger.Error(ex.ToString());
             return "";
         }
-        
-        string resultNoException = "KEK";
-        Logger.Info("Got response successfully.");
-        return resultNoException;
     }
 }
 

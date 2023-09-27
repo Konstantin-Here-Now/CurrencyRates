@@ -41,9 +41,11 @@ public class CursOnDateOperations
             return $"{year}-{month}-{day}";
         }
         else
+        {
             Logger.Warning("The was no date in Central Bank XML response." +
             "Be careful: if the time of this log is later then 12:00 UTC+3, date of currency exchange rates may be wrong.");
             return DateTime.Today.ToString("yyyy-MM-dd");
+        }
     }
 
     public static List<CursOnDateStruct> ParseCbCursOnDate(string response)

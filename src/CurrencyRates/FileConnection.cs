@@ -3,15 +3,15 @@ using Logging;
 
 class WriterToFile
 {
-    public static void WriteResultToFile(string result, string resultsFilename)
+    public static void WriteToFile(string stringToWrite, string filename)
     {
-        Logger.Info($"Writing results to file {resultsFilename}.");
-        string pathToFile = Environment.CurrentDirectory + "/" + resultsFilename;
+        Logger.Info($"Writing results to file {filename}.");
+        string pathToFile = Environment.CurrentDirectory + "/" + filename;
 
 
         using (var streamWriter = new StreamWriter(pathToFile, true))
         {
-            streamWriter.WriteLine(result);
+            streamWriter.WriteLine(stringToWrite);
         }
     }
 }
