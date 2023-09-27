@@ -1,24 +1,20 @@
 namespace SoapConnection;
 using System.Net;
-
+using System.Text;
+using System.Xml.Linq;
 using Logging;
 
 public class Connection
 {
-    private static HttpWebRequest CreatePOSTSoapWebRequest(string url, string soapEnvelope)
+    private static HttpRequestMessage CreatePOSTSoapWebRequest(string url, string soapEnvelope)
     {
         Logger.Info("Creating SOAP POST request...");
-        //TODO replace with HttpClient
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        var request = new HttpRequestMessage(HttpMethod.Post, url);
 
-        request.Method = "POST";
-        request.ContentType = "application/soap+xml; charset=utf-8";
-
-        StreamWriter streamWriter = new StreamWriter(request.GetRequestStream());
-        streamWriter.Write(soapEnvelope);
-        streamWriter.Close();
-
-        request.ContentLength = soapEnvelope.Length;
+        request.Headers.Add("ContentType", "application/soap+xml; charset=utf-8");
+        request.Headers.Add("ContentLength", soapEnvelope.Length.ToString());
+        XDocument xmlContent = XDocument.Parse(soapEnvelope);
+        request.Content = new StringContent(xmlContent.ToString(), Encoding.UTF8, "text/xml");
 
         return request;
     }
@@ -29,17 +25,20 @@ public class Connection
         Logger.Info("Getting SOAP requests' response...");
         try
         {
-            HttpWebRequest request = CreatePOSTSoapWebRequest(url, soapEnvelope);
-            WebResponse response = request.GetResponse();
+            HttpRequestMessage requestMessage = CreatePOSTSoapWebRequest(url, soapEnvelope);
 
-            using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+            var httpClient = new HttpClient();
+            var response = httpClient.Send(requestMessage);
+
+            Stream contentStream = response.Content.ReadAsStream();
+            using (var streamReader = new StreamReader(contentStream, Encoding.UTF8))
             {
-                string result = streamReader.ReadToEnd();
+                string responseContent = streamReader.ReadToEnd();
                 Logger.Info("Got response successfully.");
-                return result;
+                return responseContent;
             }
         }
-        catch (WebException ex)
+        catch (HttpRequestException ex)
         {
             Logger.Error(ex.ToString());
             return "";
