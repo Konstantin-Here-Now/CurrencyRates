@@ -19,14 +19,13 @@ public struct OneCursStruct
 public struct CursOnDateStruct
 {
     public string cursDate { get; set; }
-    public OneCursStruct cursData { get; set; }
+    public List<OneCursStruct> cursData { get; set; }
 }
 
 public class CursOnDateOperations
 {
     static string GetCursDateOrToday(XDocument xdoc)
     {
-
         XNamespace xs = "http://www.w3.org/2001/XMLSchema";
         XNamespace msprop = "urn:schemas-microsoft-com:xml-msprop";
         XAttribute? cursDate = xdoc.Descendants(xs + "element").First().Attribute(msprop + "OnDate");
@@ -48,35 +47,38 @@ public class CursOnDateOperations
         }
     }
 
-    public static List<CursOnDateStruct> ParseCbCursOnDate(string response)
+    static OneCursStruct ParseOneCursStruct(XElement oneCurs)
+    {
+        var oneCursStruct = new OneCursStruct();
+        var oneCursProperties = oneCursStruct.GetType().GetProperties();
+
+        // using object because SetValue always set "null" for structs
+        object tempOneCursStruct = oneCursStruct;
+        foreach (var property in oneCursProperties)
+        {
+            string propertyValue = GetXMLTagFirstValue(oneCurs, property.Name).Trim();
+            property.SetValue(tempOneCursStruct, propertyValue);
+        }
+
+        oneCursStruct = (OneCursStruct)tempOneCursStruct;
+
+        return oneCursStruct;
+    }
+
+    public static CursOnDateStruct ParseCbCursOnDate(string response)
     {
         Logger.Info("Parsing XML-response...");
 
-        var cursesParsed = new List<CursOnDateStruct>();
+        var cursesParsed = new CursOnDateStruct();
         XDocument cursesXDoc = XDocument.Parse(response);
-        string cursDate = GetCursDateOrToday(cursesXDoc);
+
+        cursesParsed.cursDate = GetCursDateOrToday(cursesXDoc);
+        cursesParsed.cursData = new List<OneCursStruct>();
 
         foreach (var oneCurs in cursesXDoc.Descendants("ValuteCursOnDate").ToList())
         {
-            var oneCursStruct = new OneCursStruct();
-            var oneCursProperties = oneCursStruct.GetType().GetProperties();
-
-            // using object because SetValue always set "null" for structs
-            object tempOneCursStruct = oneCursStruct;
-            foreach (var property in oneCursProperties)
-            {
-                string propertyValue = GetXMLTagFirstValue(oneCurs, property.Name).Trim();
-                property.SetValue(tempOneCursStruct, propertyValue);
-            }
-            oneCursStruct = (OneCursStruct)tempOneCursStruct;
-
-            var oneCursOnDate = new CursOnDateStruct
-            {
-                cursDate = cursDate,
-                cursData = oneCursStruct
-            };
-
-            cursesParsed.Add(oneCursOnDate);
+            OneCursStruct oneCursStruct = ParseOneCursStruct(oneCurs);
+            cursesParsed.cursData.Add(oneCursStruct);
         }
 
         Logger.Info("Parsed successfully.");
@@ -84,7 +86,7 @@ public class CursOnDateOperations
         return cursesParsed;
     }
 
-    public static string JSONSerializeCbCursOnDate(List<CursOnDateStruct> cursOnDate)
+    public static string JSONSerializeCbCursOnDate(CursOnDateStruct cursOnDate)
     {
         var serializerOptions = new JsonSerializerOptions
         {

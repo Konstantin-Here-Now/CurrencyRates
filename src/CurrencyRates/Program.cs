@@ -11,18 +11,21 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.WriteLine("Program started!");
+        Console.WriteLine("To stop the program press \"Enter\"");
         try
         {
             Dictionary<string, dynamic> config = GetConfig();
+
             int interval = checked(config["timerIntervalHours"] * 60 * 60 * 1000);
             var timer = new Timer(delegate { CallBack(config); }, config, 0, interval);
 
-            // for stopping program just press "Enter"
             Console.ReadLine();
         }
         catch (Exception ex)
         {
-            Logger.Error(ex.ToString());
+            Console.WriteLine("Critical error catched!");
+            Logger.Critical(ex.ToString());
             throw;
         }
     }
@@ -42,7 +45,7 @@ class Program
 
         if (serializeNeeded == true && response != "")
         {
-            List<CursOnDateStruct> parsedResult = ParseCbCursOnDate(response);
+            CursOnDateStruct parsedResult = ParseCbCursOnDate(response);
             string serializedResult = JSONSerializeCbCursOnDate(parsedResult);
 
             WriteToFile(serializedResult, resultsFilename!);
