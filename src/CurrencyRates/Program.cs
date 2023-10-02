@@ -3,7 +3,7 @@
 using static SoapConnection.Connection;
 using static CbSoapEnvelope.SoapEnvelope;
 using static FileConnection.WriterToFile;
-using CursOnDate;
+using CursStructs;
 using static CursOnDate.CursOnDateOperations;
 using Logging;
 

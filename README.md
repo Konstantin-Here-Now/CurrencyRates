@@ -66,7 +66,7 @@ Configuration can be found in `app.config`. In XML-elements `add` attribute `val
 
 ## Testing
 
-Execute following command:
+Code is partly covered with unit-tests. Execute following command to run them:
 
 ```bash
 dotnet test

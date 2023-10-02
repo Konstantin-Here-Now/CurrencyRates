@@ -6,7 +6,8 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 using static XMLOperationsList.XMLOperations;
 using static CbSoapEnvelope.SoapEnvelope;
-using CursOnDate;
+using static CursOnDate.CursOnDateOperations;
+using CursStructs;
 
 public class UnitTestXMLOperationsList
 {
@@ -76,7 +77,6 @@ public class UnitTestSoapEnvelope
 
 public class UnitTestCursOnDate
 {
-
     [Fact]
     public void TestParseCbCursOnDate_Ordinal()
     {
@@ -103,7 +103,35 @@ public class UnitTestCursOnDate
             VunitRate: "57.3028"
         ));
 
-        var result = CursOnDateOperations.ParseCbCursOnDate(testInput);
+        var result = ParseCbCursOnDate(testInput);
+
+        Assert.Equal(result, expectedOutput);
+    }
+
+    [Fact]
+    public void TestJSONSerializeCbCursOnDate_Ordinal()
+    {
+        var testInput = new CursOnDateStruct(cursDate: "2023-09-30", cursData: new List<OneCursStruct>());
+        testInput.cursData.Add(new OneCursStruct(
+            Vname: "Австралийский доллар",
+            Vnom: "1",
+            Vcurs: "62.9104",
+            Vcode: "36",
+            VchCode: "AUD",
+            VunitRate: "62.9104"
+        ));
+        testInput.cursData.Add(new OneCursStruct(
+            Vname: "Азербайджанский манат",
+            Vnom: "1",
+            Vcurs: "",
+            Vcode: "944",
+            VchCode: "AZN",
+            VunitRate: "57.3028"
+        ));
+        var expectedOutput = "{\"cursDate\":\"2023-09-30\",\"cursData\":[{\"Vname\":\"Австралийский доллар\",\"Vnom\":\"1\",\"Vcurs\":\"62.9104\",\"Vcode\":\"36\",\"VchCode\":\"AUD\",\"VunitRate\":\"62.9104\"},{\"Vname\":\"Азербайджанский манат\",\"Vnom\":\"1\",\"Vcurs\":\"\",\"Vcode\":\"944\",\"VchCode\":\"AZN\",\"VunitRate\":\"57.3028\"}]}";
+
+        var result = JSONSerializeCbCursOnDate(testInput);
+        Console.WriteLine(result);
 
         Assert.Equal(result, expectedOutput);
     }
