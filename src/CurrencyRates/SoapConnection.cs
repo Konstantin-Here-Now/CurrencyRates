@@ -6,6 +6,12 @@ using Logging;
 
 public class Connection
 {
+    /// <summary>
+    /// Создание POST-запроса по протоколу SOAP.
+    /// </summary>
+    /// <param name="url">Адрес, на который отправится запрос.</param>
+    /// <param name="soapEnvelope">Элемент Envelope (тело запроса).</param>
+    /// <returns>POST-запрос по протоколу SOAP.</returns>
     private static HttpRequestMessage CreatePOSTSoapWebRequest(string url, string soapEnvelope)
     {
         Logger.Info("Creating SOAP POST request...");
@@ -19,7 +25,12 @@ public class Connection
         return request;
     }
 
-
+    /// <summary>
+    /// Метод, возврающий ответ на POST-запрос по протоколу SOAP.
+    /// </summary>
+    /// <param name="url">Адрес, на который отправится запрос.</param>
+    /// <param name="soapEnvelope">Элемент Envelope (тело запроса).</param>
+    /// <returns>Ответ в виде XML-строки.</returns>
     public static string GetSoapResponse(string url, string soapEnvelope)
     {
         Logger.Info("Getting SOAP requests' response...");

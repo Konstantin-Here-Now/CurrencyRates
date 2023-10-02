@@ -3,6 +3,11 @@ using Logging;
 
 public class SoapEnvelope
 {
+    /// <summary>
+    /// Метод, создающий элемент SOAP Envelope для POST-запроса к ЦБ РФ.
+    /// </summary>
+    /// <param name="dateTime">Время, на которое актуальны курсы валют.</param>
+    /// <returns></returns>
     public static string CreateSoapEnvelopeCbCurs(DateTime dateTime)
     {
         Logger.Info("Creating envelope for SOAP request...");

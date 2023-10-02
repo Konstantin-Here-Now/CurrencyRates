@@ -9,6 +9,10 @@ using Logging;
 
 class Program
 {
+    /// <summary>
+    /// Точка входа программы. Содержит таймер, который вызывает основную логику программы.
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
         Console.WriteLine("Program started!");
@@ -30,15 +34,16 @@ class Program
         }
     }
 
+    /// <summary>
+    /// Основная логика программы, вызываемая через определенный интервал.
+    /// </summary>
+    /// <param name="config">Конфигурация приложения в виде словаря.</param>
     static void CallBack(Dictionary<string, dynamic> config)
     {
         Logger.Info("<<<Starting another loop...>>>");
         string URL = config["cbURL"];
         string resultsFilename = config["resultsFilename"];
         bool serializeNeeded = config["serializeNeeded"];
-
-
-        if (URL == null | resultsFilename == null) throw new ArgumentNullException("Missing args URL or resultsFilename in \"app.config\" file.");
 
         string SoapEnvelope = CreateSoapEnvelopeCbCurs(DateTime.Today);
         string response = GetSoapResponse(URL!, SoapEnvelope);
@@ -62,6 +67,12 @@ class Program
         Logger.Info("<<<Everything was successful.>>>");
     }
 
+    /// <summary>
+    /// Метод, который считывает конфигурацию программы из файла app.config.
+    /// </summary>
+    /// <returns>Конфигурация программы в виде словаря.</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     static Dictionary<string, dynamic> GetConfig()
     {
         Logger.Info("Setting config...");

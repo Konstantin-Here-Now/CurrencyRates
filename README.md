@@ -16,10 +16,10 @@ Console app for get currency exchange rates using Russian Central Bank API.
 To use the project, you need to install [.NET](https://dotnet.microsoft.com/en-us/download) (version 7.0 recommended).
 
 ## Quick start
-Go to `src/CurrencyRates` and execute following command:
+Execute following command:
 
 ```bash
-dotnet run
+dotnet run --project src/CurrencyRates/
 ```
 
 To stop the program press Enter.
@@ -66,4 +66,8 @@ Configuration can be found in `app.config`. In XML-elements `add` attribute `val
 
 ## Testing
 
-Coming soon...
+Execute following command:
+
+```bash
+dotnet test
+```
