@@ -1,9 +1,12 @@
 namespace SoapConnection;
-using System.Net;
+
 using System.Text;
 using System.Xml.Linq;
 using Logging;
 
+/// <summary>
+/// Класс, содержащий методы для отправки запроса и получения ответа по протоколу SOAP.
+/// </summary>
 public class Connection
 {
     /// <summary>

@@ -1,6 +1,10 @@
 namespace CbSoapEnvelope;
+
 using Logging;
 
+/// <summary>
+/// Класс для формирования элемента Envelope по протоколу SOAP.
+/// </summary>
 public class SoapEnvelope
 {
     /// <summary>
