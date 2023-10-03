@@ -1,4 +1,5 @@
 namespace FileConnection;
+
 using Logging;
 
 class WriterToFile

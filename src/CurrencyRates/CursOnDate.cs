@@ -8,6 +8,9 @@ using Logging;
 using static XMLOperationsList.XMLOperations;
 using CursStructs;
 
+/// <summary>
+/// Класс, содержащий операции по парсингу XML-ответа от ЦБ РФ.
+/// </summary>
 public class CursOnDateOperations
 {
     /// <summary>

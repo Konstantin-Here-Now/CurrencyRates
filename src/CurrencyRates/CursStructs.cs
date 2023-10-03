@@ -16,6 +16,15 @@ public struct OneCursStruct
     /// <summary>Курс за 1 единицу валюты.</summary>
     public string VunitRate { get; set; }
 
+    /// <summary>
+    /// Конструктор структуры OneCursStruct.
+    /// </summary>
+    /// <param name="Vname">Название валюты.</param>
+    /// <param name="Vnom">Номинал.</param>
+    /// <param name="Vcurs">Курс.</param>
+    /// <param name="Vcode">ISO Цифровой код валюты.</param>
+    /// <param name="VchCode">ISO Символьный код валюты.</param>
+    /// <param name="VunitRate">Курс за 1 единицу валюты.</param>
     public OneCursStruct(string Vname, string Vnom, string Vcurs, string Vcode, string VchCode, string VunitRate)
     {
         this.Vname = Vname;
@@ -26,6 +35,11 @@ public struct OneCursStruct
         this.VunitRate = VunitRate;
     }
 
+    /// <summary>
+    /// Метод, переопределяющий сравнение для структуры OneCursStruct.
+    /// </summary>
+    /// <param name="obj">Объект для сравнения со структурой OneCursStruct.</param>
+    /// <returns></returns>
     public override bool Equals(object? obj)
     {
         if (obj is OneCursStruct objectType)
@@ -41,6 +55,10 @@ public struct OneCursStruct
         return false;
     }
 
+    /// <summary>
+    /// Метод, переопределяющий получение хэш-кода для структуры OneCursStruct.
+    /// </summary>
+    /// <returns>Хэш-код экземпляра структуры OneCursStruct.</returns>
     public override int GetHashCode()
     {
         return base.GetHashCode();
@@ -50,15 +68,31 @@ public struct OneCursStruct
 /// <summary>Структура, содержащая информацию о курсах валют на определенную дату.</summary>
 public struct CursOnDateStruct
 {
+    /// <summary>
+    /// Дата, на которую актуальные курсы валют.
+    /// </summary>
     public string cursDate { get; set; }
+    /// <summary>
+    /// Информация о курсах валют.
+    /// </summary>
     public List<OneCursStruct> cursData { get; set; }
 
+    /// <summary>
+    /// Конструктор структуры CursOnDateStruct.
+    /// </summary>
+    /// <param name="cursDate">Дата, на которую актуальные курсы валют.</param>
+    /// <param name="cursData">Информация о курсах валют.</param>
     public CursOnDateStruct(string cursDate, List<OneCursStruct> cursData)
     {
         this.cursDate = cursDate;
         this.cursData = cursData;
     }
 
+    /// <summary>
+    /// Метод, переопределяющий сравнение для структуры CursOnDateStruct.
+    /// </summary>
+    /// <param name="obj">Объект для сравнения со структурой CursOnDateStruct.</param>
+    /// <returns></returns>
     public override bool Equals(object? obj)
     {
         if (obj is CursOnDateStruct objectType)
@@ -69,6 +103,10 @@ public struct CursOnDateStruct
         return false;
     }
 
+    /// <summary>
+    /// Метод, переопределяющий получение хэш-кода для структуры CursOnDateStruct.
+    /// </summary>
+    /// <returns>Хэш-код экземпляра структуры CursOnDateStruct.</returns>
     public override int GetHashCode()
     {
         return base.GetHashCode();

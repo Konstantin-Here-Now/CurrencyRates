@@ -1,9 +1,11 @@
 namespace XMLOperationsList;
 
-using System.Linq.Expressions;
 using System.Xml.Linq;
 using Logging;
 
+/// <summary>
+/// Класс, содержащий операции над XML-элементами.
+/// </summary>
 public class XMLOperations
 {
     /// <summary>
